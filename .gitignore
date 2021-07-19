@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Explicitly include certain directories from .idea
+!.idea/
+.idea/*
+!.idea/fileTemplates/
+
+/data/
+/tests_integration/index/

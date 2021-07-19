@@ -1,0 +1,83 @@
+version: '3'
+services:
+  dev:
+    depends_on:
+      - elasticsearch
+    build:
+      dockerfile: Dockerfile
+      context: .
+    container_name: helix.providersearch
+    environment:
+      ELASTICSEARCH_HOST: elasticsearch
+      ELASTICSEARCH_PORT: 9200
+      ELASTICSEARCH_USER: admin
+      ELASTICSEARCH_PASSWORD: admin
+      DEBUG_METRICS: 0
+      FLASK_ENV: development
+    ports:
+      - '5000:5000'
+    volumes:
+    - ./providersearch:/usr/src/helix.providersearch/providersearch/:delegated
+    - ./tests:/usr/src/helix.providersearch/tests/:cached
+    healthcheck:
+      test: curl --fail -s http://localhost:5000/health || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  elasticsearch:
+    #    image: bitnami/elasticsearch:7.9.3  # AWS Elastic Search supports upto 7.9
+    # using OpenDistro for best compatibility with AWS Managed ElasticSearch:
+    # https://opendistro.github.io/for-elasticsearch/downloads.html
+    image: amazon/opendistro-for-elasticsearch:1.13.2
+    container_name: elasticsearch
+    environment:
+      - cluster.name=odfe-cluster
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      #      - cluster.initial_master_nodes=elasticsearch
+      - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - network.host=0.0.0.0 # required if not using the demo security configuration
+    #      - opendistro_security.disabled=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 # maximum number of open files for the Elasticsearch user, set to at least 65536 on modern systems
+        hard: 65536
+    volumes:
+      - es_data:/usr/share/elasticsearch/data:delegated
+    #      - ./conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:cached
+    ports:
+      - 9200:9200
+      - 9600:9600 # required for Performance Analyzer
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --silent --fail https://admin:admin@localhost:9200/_cluster/health --insecure || exit 1" ]
+
+  kibana:
+    #    image: bitnami/kibana:7.9.3 # AWS Elastic Search supports upto 7.9
+    # using OpenDistro for best compatibility with AWS Managed ElasticSearch:
+    # https://opendistro.github.io/for-elasticsearch/downloads.html
+    image: amazon/opendistro-for-elasticsearch-kibana:1.13.2
+    depends_on:
+      - elasticsearch
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_URL=https://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=https://elasticsearch:9200
+    #      - opendistro_security.disabled=true
+
+  elasticdump:
+    image: elasticdump/elasticsearch-dump:v6.71.0
+    depends_on:
+      - elasticsearch
+    volumes:
+    - ./data:/data
+    command: tail -f /dev/null
+
+volumes:
+  es_data:

@@ -1,0 +1,30 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+# https://ariadnegraphql.org/docs/scalars
+scalar DateTime
+scalar Time
+scalar Uri
+
+type QueryResults {
+    id: String
+}
+
+type Query {
+    """
+    Searches providers based on filters.
+    """
+    providers(
+        id: String
+    ): QueryResults!
+}
+
+type Mutation {
+    interacted(
+        "Information about the user making the request."
+        result_id: String
+    ): Boolean
+}
+
