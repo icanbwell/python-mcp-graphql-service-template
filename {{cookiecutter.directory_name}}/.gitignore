@@ -121,10 +121,17 @@ venv.bak/
 /site
 
 # mypy
-.mypy_cache/
+{{cookiecutter.directory_name}}/.mypy_cache/
 .dmypy.json
 dmypy.json
 
 # Pyre type checker
 .pyre/
-/.idea/
+
+# Explicitly include certain directories from .idea
+!../.idea/
+.idea/*
+!.idea/fileTemplates/
+
+/data/
+/tests_integration/index/

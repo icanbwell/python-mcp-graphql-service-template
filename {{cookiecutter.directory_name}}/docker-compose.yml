@@ -3,7 +3,7 @@ services:
   dev:
     build:
       dockerfile: Dockerfile
-      context: .
+      context: ..
     container_name: {{cookiecutter.docker_image_name}}
     environment:
       DEBUG_METRICS: 0
