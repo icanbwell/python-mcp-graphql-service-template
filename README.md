@@ -1,4 +1,4 @@
-# python-package-template
+# helix-service-template
 Cookiecutter template for creating a new Helix service
 
 # Usage
