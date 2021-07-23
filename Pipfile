@@ -5,11 +5,9 @@ name = "pypi"
 
 [packages]
 requests = "*"
-elasticsearch-dsl = "==7.3.0"
 ariadne= "==0.13.0"
 flask="==2.0.0"
 flask_cors = "==3.0.10"
-elasticsearch= "==7.12.1"
 boto3 = ">=1.17.49"
 newrelic = "==6.2.0.156"
 prometheus-flask-exporter = "==0.18.2"

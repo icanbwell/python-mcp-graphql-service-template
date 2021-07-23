@@ -15,12 +15,13 @@ WORKDIR ${PROJECT_DIR}
 
 COPY Pipfile .
 COPY Pipfile.lock .
-COPY ./providersearch ./providersearch
-COPY ./wsgi.py ./
-COPY ./gunicorn.conf.py ./
 
 #RUN pipenv install --deploy --ignore-pipfile
 RUN pipenv sync --dev --system
+
+COPY ./providersearch ./providersearch
+COPY ./wsgi.py ./
+COPY ./gunicorn.conf.py ./
 
 EXPOSE 5000
 

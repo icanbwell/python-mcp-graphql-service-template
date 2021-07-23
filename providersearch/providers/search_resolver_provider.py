@@ -14,6 +14,6 @@ class SearchResolverProvider:
         obj: Any,
         info: GraphQLResolveInfo,
         *,  # force keyword only args from this point forward
-        param1: str,
+        query_id: str,
     ) -> Dict[str, Any]:
-        return self.results_provider.get_results(param1=param1)
+        return self.results_provider.get_results(query_id=query_id)

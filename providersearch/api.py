@@ -27,7 +27,6 @@ from providersearch.api_schema import ApiSchema
 app = Flask(__name__)
 
 metrics = GunicornInternalPrometheusMetrics(app)
-# metrics = PrometheusMetrics(app)
 app.config["CORS_HEADERS"] = "Content-Type"
 CORS(app, resources={r"/graphql": {"origins": "*"}}, max_age=360)
 

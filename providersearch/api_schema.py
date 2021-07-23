@@ -10,7 +10,7 @@ from ariadne import (
 )
 from elasticsearch_dsl import Date
 
-from providersearch.providers.elastic_search_results_provider import (
+from providersearch.providers.my_search_results_provider import (
     MyResultsProvider,
 )
 from providersearch.providers.results_provider import ResultsProvider
@@ -39,5 +39,5 @@ class ApiSchema:
     # )
 
     data_dir: Path = Path(__file__).parent.joinpath("./")
-    type_defs1 = load_schema_from_path(str(data_dir.joinpath("schema_classic.graphql")))
+    type_defs1 = load_schema_from_path(str(data_dir.joinpath("schema.graphql")))
     schema = make_executable_schema(type_defs1, [query, mutation], datetime_scalar)

@@ -14,17 +14,13 @@ run: ## runs Flask app
 .PHONY: up
 up: ## starts docker containers
 	docker-compose up --build -d && \
-	echo "waiting for ElasticSearch server to become healthy" && \
-	while [ "`docker inspect --format {{.State.Health.Status}} elasticsearch`" != "healthy" ]; do printf "." && sleep 2; done && \
 	echo "waiting for Provider Search service to become healthy" && \
 	while [ "`docker inspect --format {{.State.Health.Status}} helix.providersearch`" != "healthy" ]; do printf "." && sleep 2; done && \
-	echo "Elastic Search: https://localhost:9200/ (admin:admin)" && \
-	echo "Elastic Search Kibana: http://localhost:5601/ (admin:admin)" && \
 	echo "Provider Search Service: http://localhost:5000/graphql"
 
 .PHONY: down
 down: ## stops docker containers
-	docker-compose down
+	docker-compose down --remove-orphans
 
 .PHONY: clean
 clean: down ## Cleans all the local docker setup
@@ -83,31 +79,3 @@ setup-pre-commit: Pipfile.lock
 .PHONY:run-pre-commit
 run-pre-commit: setup-pre-commit
 	./.git/hooks/pre-commit
-
-.PHONY: dump-dev
-dump-dev: ## downloads index from dev Elasticsearch server to data folder
-	@echo "Enter Password for reader account: "; \
-    read PASSWORD; \
-    echo "Your password is ", $${PASSWORD}; \
-	docker-compose run --rm --name elasticdump elasticdump elasticdump \
-  	--input=https://reader:$${PASSWORD}@vpc-helix-elasticsearch-xeiyn2datxvmwhcxpcfykztv4a.us-east-1.es.amazonaws.com/practitioner-en/ \
-  	--output=/data/practitioner-en.json \
-  	--type=data; \
-	docker-compose run --rm --name elasticdump elasticdump elasticdump \
-  	--input=https://reader:$${PASSWORD}@vpc-helix-elasticsearch-xeiyn2datxvmwhcxpcfykztv4a.us-east-1.es.amazonaws.com/practice-en/ \
-  	--output=/data/practice-en.json \
-  	--type=data
-
-.PHONY: load-dev
-load-dev: ## loads index from data folder into local Elasticsearch
-	docker-compose run -e NODE_TLS_REJECT_UNAUTHORIZED=0 --rm --name elasticdump elasticdump elasticdump \
-  	--input=/data/practitioner-en.json \
-  	--output=https://admin:admin@elasticsearch:9200/practitioner \
-  	--type=data; \
-  	docker-compose run -e NODE_TLS_REJECT_UNAUTHORIZED=0 --rm --name elasticdump elasticdump elasticdump \
-  	--input=/data/practice-en.json \
-  	--output=https://admin:admin@elasticsearch:9200/practice \
-  	--type=data
-
-.PHONY: copy-index-dev
-copy-index-dev: dump-dev load-dev ## copies index from dev to local Elasticsearch

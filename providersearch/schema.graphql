@@ -8,8 +8,13 @@ scalar DateTime
 scalar Time
 scalar Uri
 
+type QueryResult {
+    result_id: String
+}
+
 type QueryResults {
-    id: String
+    total_count: Int!
+    results: [QueryResult]
 }
 
 type Query {
@@ -17,7 +22,7 @@ type Query {
     Searches providers based on filters.
     """
     providers(
-        id: String
+        query_id: String
     ): QueryResults!
 }
 
