@@ -14,32 +14,13 @@ run: ## runs Flask app
 .PHONY: up
 up: ## starts docker containers
 	docker-compose up --build -d && \
-	echo "waiting for Provider Search service to become healthy" && \
-	while [ "`docker inspect --format {{.State.Health.Status}} helix.providersearch`" != "healthy" ]; do printf "." && sleep 2; done && \
-	echo "Provider Search Service: http://localhost:5000/graphql"
+	echo "waiting for {{cookiecutter.project_slug}} service to become healthy" && \
+	while [ "`docker inspect --format {{.State.Health.Status}} {{cookiecutter.docker_image_name}}`" != "healthy" ]; do printf "." && sleep 2; done && \
+	echo "{{cookiecutter.project_slug}} Service: http://localhost:5000/graphql"
 
 .PHONY: down
 down: ## stops docker containers
 	docker-compose down --remove-orphans
-
-.PHONY: clean
-clean: down ## Cleans all the local docker setup
-ifneq ($(shell docker image ls | grep "helixprovidersearch"| awk '{print $$1}'),)
-	docker image ls | grep "helixprovidersearch" | awk '{print $$1}' | xargs docker image rm
-endif
-	# do it twice since some images are used by other images
-ifneq ($(shell docker image ls | grep "helixprovidersearch"| awk '{print $$1}'),)
-	docker image ls | grep "helixprovidersearch" | awk '{print $$1}' | xargs docker image rm || true
-endif
-ifneq ($(shell docker volume ls | grep "helixprovidersearch"| awk '{print $$2}'),)
-	docker volume ls | grep "helixprovidersearch" | awk '{print $$2}' | xargs docker volume rm
-endif
-
-.PHONY: clean_data
-clean_data: down ## Cleans all the local docker setup
-ifneq ($(shell docker volume ls | grep "helixprovidersearch"| awk '{print $$2}'),)
-	docker volume ls | grep "helixprovidersearch_es" | awk '{print $$2}' | xargs docker volume rm
-endif
 
 .PHONY: update
 update: ## updates packages
@@ -47,12 +28,6 @@ update: ## updates packages
 	make down && \
 	make devdocker && \
 	make up
-
-.PHONY: init
-init: ## sets up the index and sample data
-	cd ./init/elasticsearch && \
-	./init.sh && \
-	cd ../..
 
 .DEFAULT_GOAL := help
 .PHONY: help
@@ -62,11 +37,11 @@ help: ## Show this help.
 
 .PHONY:tests
 tests: ## Runs all the tests
-	docker-compose run --rm --name helix_providersearch_tests dev pytest tests
+	docker-compose run --rm --name {{cookiecutter.project_slug}}_tests dev pytest tests
 
 .PHONY:shell
 shell: up ## Brings up the bash shell in dev docker
-	docker-compose run --rm --name helix_providersearch_shell dev /bin/sh
+	docker-compose run --rm --name {{cookiecutter.project_slug}}_shell dev /bin/sh
 
 .PHONY:clean-pre-commit
 clean-pre-commit: ## removes pre-commit hook

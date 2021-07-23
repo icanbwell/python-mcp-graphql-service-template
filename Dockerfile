@@ -2,9 +2,9 @@ FROM python:3.8
 
 RUN pip3 install pipenv
 
-ENV PROJECT_DIR /usr/src/helix.providersearch
+ENV PROJECT_DIR /usr/src/{{cookiecutter.directory_name}}
 
-ENV FLASK_APP providersearch.api
+ENV FLASK_APP {{cookiecutter.project_slug}}.api
 
 # this is needed by prometheus
 ENV PROMETHEUS_MULTIPROC_DIR /tmp/prometheus
@@ -19,7 +19,7 @@ COPY Pipfile.lock .
 #RUN pipenv install --deploy --ignore-pipfile
 RUN pipenv sync --dev --system
 
-COPY ./providersearch ./providersearch
+COPY ./{{cookiecutter.project_slug}} ./{{cookiecutter.project_slug}}
 COPY ./wsgi.py ./
 COPY ./gunicorn.conf.py ./
 

@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from providersearch.providers.results_provider import ResultsProvider
+from {{cookiecutter.project_slug}}.providers.results_provider import ResultsProvider
 
 
 class MyResultsProvider(ResultsProvider):

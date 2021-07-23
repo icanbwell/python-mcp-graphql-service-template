@@ -5,8 +5,7 @@ on:
     types: [created]
 
 env:
-  # TODO: Change variable to your image's name.
-  IMAGE_NAME: helix.providersearch
+  IMAGE_NAME: {{cookiecutter.docker_image_name}}
   REPOSITORY_URL: 400686897767.dkr.ecr.us-east-1.amazonaws.com
 
 jobs:

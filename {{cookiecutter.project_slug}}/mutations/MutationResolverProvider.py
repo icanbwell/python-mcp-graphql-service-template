@@ -2,7 +2,7 @@ from typing import Any, Optional
 
 from graphql import GraphQLResolveInfo
 
-from providersearch.mutations.MutationProvider import MutationProvider
+from {{cookiecutter.project_slug}}.mutations.MutationProvider import MutationProvider
 
 
 class MutationResolverProvider:

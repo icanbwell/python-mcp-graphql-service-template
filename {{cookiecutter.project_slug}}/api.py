@@ -22,7 +22,7 @@ from flask_cors import CORS, cross_origin
 # an extension targeted at Gunicorn deployments for prometheus scraping in flask applications
 from prometheus_flask_exporter.multiprocess import GunicornInternalPrometheusMetrics
 
-from providersearch.api_schema import ApiSchema
+from {{cookiecutter.project_slug}}.api_schema import ApiSchema
 
 app = Flask(__name__)
 

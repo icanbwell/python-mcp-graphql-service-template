@@ -4,15 +4,15 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-    container_name: helix.providersearch
+    container_name: {{cookiecutter.docker_image_name}}
     environment:
       DEBUG_METRICS: 0
       FLASK_ENV: development
     ports:
       - '5000:5000'
     volumes:
-    - ./providersearch:/usr/src/helix.providersearch/providersearch/:delegated
-    - ./tests:/usr/src/helix.providersearch/tests/:cached
+    - ./{{cookiecutter.project_slug}}:/usr/src/{{cookiecutter.directory_name}}/{{cookiecutter.project_slug}}/:delegated
+    - ./tests:/usr/src/{{cookiecutter.directory_name}}/tests/:cached
     healthcheck:
       test: curl --fail -s http://localhost:5000/health || exit 1
       interval: 1m30s

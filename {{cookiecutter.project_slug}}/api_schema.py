@@ -10,11 +10,11 @@ from ariadne import (
 )
 from elasticsearch_dsl import Date
 
-from providersearch.providers.my_search_results_provider import (
+from {{cookiecutter.project_slug}}.providers.my_search_results_provider import (
     MyResultsProvider,
 )
-from providersearch.providers.results_provider import ResultsProvider
-from providersearch.providers.search_resolver_provider import SearchResolverProvider
+from {{cookiecutter.project_slug}}.providers.results_provider import ResultsProvider
+from {{cookiecutter.project_slug}}.providers.search_resolver_provider import SearchResolverProvider
 
 
 datetime_scalar = ScalarType("DateTime")
