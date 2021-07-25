@@ -15,7 +15,7 @@ run: ## runs Flask app
 up: ## starts docker containers
 	docker-compose up --build -d && \
 	echo "waiting for {{cookiecutter.project_slug}} service to become healthy" && \
-	while [ "`docker inspect --format {{.State.Health.Status}} {{cookiecutter.docker_image_name}}`" != "healthy" ]; do printf "." && sleep 2; done && \
+	while [ "`docker inspect --format {{ {{.State.Health.Status}} }} {{cookiecutter.docker_image_name}}`" != "healthy" ]; do printf "." && sleep 2; done && \
 	echo "{{cookiecutter.project_slug}} Service: http://localhost:5000/graphql"
 
 .PHONY: down
