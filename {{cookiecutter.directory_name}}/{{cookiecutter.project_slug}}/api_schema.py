@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Any
+from datetime import datetime
 
 from ariadne import (
     load_schema_from_path,
@@ -8,7 +9,6 @@ from ariadne import (
     QueryType,
     ScalarType,
 )
-from elasticsearch_dsl import Date
 
 from {{cookiecutter.project_slug}}.providers.my_search_results_provider import (
     MyResultsProvider,
@@ -21,7 +21,7 @@ datetime_scalar = ScalarType("DateTime")
 
 
 @datetime_scalar.serializer
-def serialize_datetime(value: Any) -> Date:
+def serialize_datetime(value: Any) -> datetime:
     return value.isoformat()
 
 
