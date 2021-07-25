@@ -10,7 +10,7 @@ Cookiecutter template for creating a new Helix service
 6. This will ask you for the parameters.  Be sure to use your github repo name as the directory name
 7. After generation is complete, run `make devsetup` to set up your environment.
 8. In PyCharm, create a new docker compose interpreter and choose 'dev' as the service
-
+9. Set pytest as the default test runner in PyCharm
 
 
 

@@ -1,0 +1,17 @@
+{
+  "data": {
+    "providers": {
+      "results": [
+        {
+          "content": "John Madison",
+          "content_auto": "John Madison"
+        },
+        {
+          "content": "John McKay",
+          "content_auto": "John McKay"
+        }
+      ],
+      "total_count": 6
+    }
+  }
+}
