@@ -19,7 +19,7 @@ COPY Pipfile.lock .
 #RUN pipenv install --deploy --ignore-pipfile
 RUN pipenv sync --dev --system
 
-COPY ..{{cookiecutter.project_slug}} ./{{cookiecutter.project_slug}}
+COPY ./{{cookiecutter.project_slug}} ./{{cookiecutter.project_slug}}
 COPY wsgi.py ./
 COPY gunicorn.conf.py ./
 

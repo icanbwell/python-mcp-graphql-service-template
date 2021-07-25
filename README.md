@@ -9,6 +9,8 @@ Cookiecutter template for creating a new Helix service
 5. Run cookiecutter:`cookiecutter -f https://github.com/icanbwell/helix-service-template.git -o ../`
 6. This will ask you for the parameters.  Be sure to use your github repo name as the directory name
 7. After generation is complete, run `make devsetup` to set up your environment.
+8. In PyCharm, create a new docker compose interpreter and choose 'dev' as the service
+
 
 
 
