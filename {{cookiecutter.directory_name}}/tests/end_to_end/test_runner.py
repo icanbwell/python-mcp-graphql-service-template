@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional
 
 from deepdiff import DeepDiff  # For Deep Difference of 2 objects
 from flask.testing import FlaskClient
+from tests.end_to_end.exception_test import ExceptionInTestRunner
 
 
 def run_test_runner(
@@ -53,7 +54,7 @@ def run_test_runner(
                     expected_json = json.loads(file.read())
             except FileNotFoundError:
                 # the expected file cannot be found
-                raise TestRunnerException(
+                raise ExceptionInTestRunner(
                     f"No search results file found in 'expected' directory for graphql query {graphql_file_name}."
                     f"Please add the missing results file {expected_file}"
                 )
@@ -70,6 +71,3 @@ def run_test_runner(
     assert found_file, "No test file was found"
 
 
-class TestRunnerException(Exception):
-    def __init__(self, message: str) -> None:
-        super().__init__(message)
