@@ -12,7 +12,7 @@ Cookiecutter template for creating a new Helix service
 8. In PyCharm, create a new docker compose interpreter and choose 'dev' as the service
 9. Set pytest as the default test runner in PyCharm
 10. Run `make tests` to check that the simple test passes.
-
+11. Run `make up` to run your new service
 
 
 
