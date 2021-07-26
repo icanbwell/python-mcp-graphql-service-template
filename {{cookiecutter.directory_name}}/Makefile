@@ -68,4 +68,4 @@ setup-pre-commit: Pipfile.lock
 
 .PHONY:run-pre-commit
 run-pre-commit: setup-pre-commit
-	./.git/hooks/pre-commit
+	./.git/hooks/pre-commit pre_commit_all_files
