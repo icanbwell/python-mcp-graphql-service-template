@@ -8,7 +8,7 @@ Pipfile.lock: Pipfile
 
 .PHONY:devsetup
 devsetup: ## one time setup for devs
-	docker-compose run --rm --name helix_pipenv_{{cookiecutter.project_slug}} dev pipenv sync && \
+	make update && \
 	make up && \
 	make setup-pre-commit && \
 	make tests
