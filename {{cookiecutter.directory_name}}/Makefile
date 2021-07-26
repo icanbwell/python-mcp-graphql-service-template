@@ -1,7 +1,16 @@
+export LANG
+
+GIT_HASH=${CIRCLE_SHA1}
+PACKAGES_FOLDER=/usr/local/lib/python3.8/dist-packages
+
+Pipfile.lock: Pipfile
+	docker-compose run --rm --name helix_pipenv_{{cookiecutter.project_slug}} dev rm -f Pipfile.lock && pipenv lock --dev --clear
+
 .PHONY:devsetup
 devsetup: ## one time setup for devs
-	pip3 install --user pipenv && \
-	pipenv install --dev
+	make up && \
+	make setup-pre-commit && \
+	make tests
 
 .PHONY:devdocker
 devdocker: ## Builds the docker for dev
@@ -9,7 +18,7 @@ devdocker: ## Builds the docker for dev
 
 .PHONY: run
 run: ## runs Flask app
-	pipenv run flask run
+	docker-compose run --rm --name helix_pipenv_{{cookiecutter.project_slug}} dev pipenv run flask run
 
 .PHONY: up
 up: ## starts docker containers
@@ -22,12 +31,17 @@ up: ## starts docker containers
 down: ## stops docker containers
 	docker-compose down --remove-orphans
 
-.PHONY: update
-update: ## updates packages
-	pipenv update && \
-	make down && \
+.PHONY:update
+update: Pipfile.lock setup-pre-commit  ## Updates all the packages using Pipfile
+	docker-compose run --rm --name helix_pipenv_{{cookiecutter.project_slug}} dev pipenv sync && \
 	make devdocker && \
-	make up
+	make run-pre-commit && \
+	echo "In PyCharm, do File -> Invalidate Caches/Restart to refresh" && \
+	echo "If you encounter issues with remote sources being out of sync, click on the 'Remote Python' feature on" && \
+	echo "the lower status bar and reselect the same interpreter and it will rebuild the remote source cache." && \
+	echo "See this link for more details:" && \
+	echo "https://intellij-support.jetbrains.com/hc/en-us/community/posts/205813579-Any-way-to-force-a-refresh-of-external-libraries-on-a-remote-interpreter-?page=2#community_comment_360002118020"
+
 
 .DEFAULT_GOAL := help
 .PHONY: help
