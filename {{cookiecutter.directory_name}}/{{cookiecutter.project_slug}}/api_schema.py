@@ -1,6 +1,5 @@
 from pathlib import Path
 from typing import Any
-from datetime import datetime
 
 from ariadne import (
     load_schema_from_path,
@@ -21,7 +20,7 @@ datetime_scalar = ScalarType("DateTime")
 
 
 @datetime_scalar.serializer
-def serialize_datetime(value: Any) -> datetime:
+def serialize_datetime(value: Any) -> str:
     return value.isoformat()  # type: ignore
 
 
