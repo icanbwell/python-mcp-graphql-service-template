@@ -15,4 +15,14 @@ Cookiecutter template for creating a new Helix service
 11. Run `make up` to run your new service
 
 
+# Automated builds in Github (Continuous Integration)
+You will automatically have automated build and test run when you create a PR in github
+
+# Automated deployment to AWS ECR (Continuous Deployment)
+When you create a release, the docker image will be automatically pushed to AWS ECR.
+
+NOTE: You have to create the image repo one time in AWS ECR
+
+
+
 
