@@ -19,7 +19,7 @@ def run_test_runner(
     print(f"Running {test_name}")
 
     # read the graphql query
-    graphql_folder = data_dir.joinpath("simple/graphql")
+    graphql_folder = data_dir.joinpath("graphql")
     graphql_files: List[str] = glob.glob(str(graphql_folder.joinpath("*.gql")))
     graphql_file: str
     graphql_file_name: str
@@ -36,7 +36,7 @@ def run_test_runner(
         response = graphql_client.post("/graphql", json={"query": graphql_query})
         assert response.status_code == 200
         # compare to expected json
-        expected_file: Path = data_dir.joinpath("simple/expected").joinpath(
+        expected_file: Path = data_dir.joinpath("expected").joinpath(
             f"{graphql_file_name}.json"
         )
         print(f"Loading {graphql_file_name}")
@@ -45,7 +45,7 @@ def run_test_runner(
                 expected_json: Dict[str, Any] = json.loads(file.read())
         except FileNotFoundError:
             # if no file matching the query file name found then look for expected.json
-            expected_file = data_dir.joinpath("simple/expected").joinpath(
+            expected_file = data_dir.joinpath("expected").joinpath(
                 "expected.json"
             )
             try:
