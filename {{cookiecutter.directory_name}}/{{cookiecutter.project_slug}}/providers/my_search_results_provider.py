@@ -5,4 +5,11 @@ from {{cookiecutter.project_slug}}.providers.results_provider import ResultsProv
 
 class MyResultsProvider(ResultsProvider):
     def get_results(self, query_id: str) -> Dict[str, Any]:
-        return {}
+        return {
+            "total_count": 1,
+            "results": [
+                {
+                    "result_id": 123
+                }
+            ]
+        }

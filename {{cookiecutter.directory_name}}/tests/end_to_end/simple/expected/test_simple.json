@@ -3,15 +3,10 @@
     "providers": {
       "results": [
         {
-          "content": "John Madison",
-          "content_auto": "John Madison"
-        },
-        {
-          "content": "John McKay",
-          "content_auto": "John McKay"
+          "result_id": "123"
         }
       ],
-      "total_count": 6
+      "total_count": 1
     }
   }
 }
