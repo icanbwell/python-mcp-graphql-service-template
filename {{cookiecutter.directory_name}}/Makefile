@@ -11,7 +11,8 @@ devsetup: ## one time setup for devs
 	make update && \
 	make up && \
 	make setup-pre-commit && \
-	make tests
+	make tests && \
+	make up
 
 .PHONY:devdocker
 devdocker: ## Builds the docker for dev
@@ -26,6 +27,7 @@ up: ## starts docker containers
 	docker-compose up --build -d && \
 	echo "waiting for {{cookiecutter.project_slug}} service to become healthy" && \
 	while [ "`docker inspect --format {{ '{{.State.Health.Status}}' }} {{cookiecutter.docker_image_name}}`" != "healthy" ]; do printf "." && sleep 2; done && \
+	echo ""
 	echo "{{cookiecutter.project_slug}} Service: http://localhost:5000/graphql"
 
 .PHONY: down
