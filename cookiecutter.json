@@ -1,5 +1,5 @@
 {
-  "directory_name": "{{ cookiecutter.directory_name }}",
+  "directory_name": "my_repo_folder",
   "package_name": "{{ cookiecutter.directory_name|replace('-', '') }}",
   "project_slug": "{{ cookiecutter.package_name.lower().replace('helix.','').replace(' ', '_').replace('-', '_').replace('.', '_') }}",
   "docker_image_name": "{{ cookiecutter.directory_name|replace('-', '') }}",
