@@ -11,7 +11,7 @@ services:
     ports:
       - '5000:5000'
     volumes:
-    - ./{{cookiecutter.project_slug}}:/usr/src/{{cookiecutter.directory_name}}/{{cookiecutter.project_slug}}/:delegated
+    - ./:/usr/src/{{cookiecutter.directory_name}}/:cached
     - ./tests:/usr/src/{{cookiecutter.directory_name}}/tests/:cached
     healthcheck:
       test: curl --fail -s http://localhost:5000/health || exit 1
