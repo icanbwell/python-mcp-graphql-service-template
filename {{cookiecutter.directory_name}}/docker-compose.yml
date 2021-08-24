@@ -8,6 +8,7 @@ services:
     environment:
       DEBUG_METRICS: 0
       FLASK_ENV: development
+    env_file: docker.env
     ports:
       - '5000:5000'
     volumes:
