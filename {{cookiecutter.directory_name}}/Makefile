@@ -1,10 +1,10 @@
 export LANG
 
 GIT_HASH=${CIRCLE_SHA1}
-PACKAGES_FOLDER=/usr/local/lib/python3.8/dist-packages
+PACKAGES_FOLDER=/usr/local/lib/python3.9/dist-packages
 
 Pipfile.lock: Pipfile
-	docker-compose run --rm --name helix_pipenv_{{cookiecutter.project_slug}} dev rm -f Pipfile.lock && pipenv lock --dev --clear
+	docker-compose run --rm --name helix_pipenv_{{cookiecutter.project_slug}} dev sh -c "rm -f Pipfile.lock && pipenv lock --dev --clear"
 
 .PHONY:devsetup
 devsetup: ## one time setup for devs
