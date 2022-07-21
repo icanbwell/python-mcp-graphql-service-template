@@ -30,7 +30,7 @@ RUN pip list -v
 FROM python:3.9-slim-bullseye
 
 RUN apt-get update && \
-    apt-get install -y git && \
+    apt-get install -y curl git && \
     pip install pipenv
 
 ENV PROJECT_DIR /usr/src/{{cookiecutter.directory_name}}
@@ -48,7 +48,8 @@ RUN mkdir -p /usr/local/lib/python3.9/site-packages/ && \
 
 # copy the python packags from the above docker so we only get the necessary stuff
 COPY --from=python_packages /usr/local/lib/python3.9/site-packages/ /usr/local/lib/python3.9/site-packages/
-# get the shell commands for these twp packages also
+# get the shell commands for these packages also
+COPY --from=python_packages /usr/local/bin/flask /usr/local/bin/flask
 COPY --from=python_packages /usr/local/bin/pytest /usr/local/bin/pytest
 COPY --from=python_packages /usr/local/bin/gunicorn /usr/local/bin/gunicorn
 
@@ -61,5 +62,5 @@ COPY gunicorn.conf.py ${PROJECT_DIR}/
 
 EXPOSE 5000
 
-#CMD ["pipenv", "run", "flask", "run", "-h", "0.0.0.0"]
-CMD ["pipenv", "run", "gunicorn", "--workers", "4", "--bind", "0.0.0.0:5000", "wsgi:app"]
+CMD ["pipenv", "run", "flask", "run", "-h", "0.0.0.0"]
+#CMD ["pipenv", "run", "gunicorn", "--workers", "4", "--bind", "0.0.0.0:5000", "wsgi:app"]
