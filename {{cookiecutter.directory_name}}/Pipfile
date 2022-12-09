@@ -4,24 +4,24 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-wheel = "==0.37.1"
+wheel = ">=0.38.4"
 requests = "*"
-ariadne= "==0.14.1"
-flask="==2.1.0"
+ariadne= "==0.16.1"
+flask="==2.2.2"
 flask_cors = "==3.0.10"
-boto3 = ">=1.21.29"
+boto3 = ">=1.26.26"
 newrelic = "==6.2.0.156"
 prometheus-flask-exporter = "==0.18.2"
 gunicorn = "==20.1.0"
 
 [dev-packages]
-pre-commit=">=2.17.0"
-autoflake=">=1.4"
-flake8 = ">=4.0.1"
-mypy = ">=0.941,<1.000"
-pytest = ">=7.1.1"
-black = ">=22.1.0"
-deepdiff = { version = ">=5.7.0", extras = ["murmur"] }
+pre-commit=">=2.20.0"
+autoflake=">=2.0.0"
+mypy = ">=0.991"
+pytest = ">=7.2.0"
+black = ">=22.10.0"
+deepdiff = { version = ">=6.2.1", extras = ["murmur"] }
 
 [requires]
 python_version = "3.9"
+
