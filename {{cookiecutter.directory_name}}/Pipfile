@@ -12,6 +12,7 @@ flask_cors = "==3.0.10"
 boto3 = ">=1.26.26"
 prometheus-flask-exporter = "==0.21.0"
 gunicorn = "==20.1.0"
+ddtrace="==1.10.2"
 
 [dev-packages]
 pre-commit=">=2.20.0"

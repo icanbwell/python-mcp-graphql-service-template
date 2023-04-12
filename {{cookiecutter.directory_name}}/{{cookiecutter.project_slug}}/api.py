@@ -24,6 +24,14 @@ from prometheus_flask_exporter.multiprocess import GunicornInternalPrometheusMet
 
 from {{cookiecutter.project_slug}}.api_schema import ApiSchema
 
+from {{cookiecutter.project_slug}}.apm.ddtrace import ddtrace_config, ddtrace_enable_tracking
+
+
+# Datadog ddtrace
+ddtrace_config()
+ddtrace_enable_tracking()
+
+
 app = Flask(__name__)
 
 metrics = GunicornInternalPrometheusMetrics(app)
