@@ -29,9 +29,10 @@ RUN pip list -v
 
 FROM python:3.9-slim-bullseye
 
-RUN apt-get update && \
-    apt-get install -y curl git && \
-    pip install pipenv
+# Update everything on the OS
+RUN apt-get -y update && apt-get -y install curl && apt-get clean && rm -rf /var/cache/apt/*
+
+RUN pip3 install pipenv
 
 ENV PROJECT_DIR /usr/src/{{cookiecutter.directory_name}}
 
@@ -42,25 +43,19 @@ ENV PROMETHEUS_MULTIPROC_DIR /tmp/prometheus
 
 RUN mkdir -p ${PROMETHEUS_MULTIPROC_DIR}
 
-RUN mkdir -p /usr/local/lib/python3.9/site-packages/ && \
-    mkdir -p /usr/local/lib/python3.9/dist-packages && \
-    mkdir -p /usr/local/bin/
-
-# copy the python packags from the above docker so we only get the necessary stuff
-COPY --from=python_packages /usr/local/lib/python3.9/site-packages/ /usr/local/lib/python3.9/site-packages/
-# get the shell commands for these packages also
-COPY --from=python_packages /usr/local/bin/flask /usr/local/bin/flask
-COPY --from=python_packages /usr/local/bin/pytest /usr/local/bin/pytest
-COPY --from=python_packages /usr/local/bin/gunicorn /usr/local/bin/gunicorn
-
-COPY Pipfile* ${PROJECT_DIR}/
 WORKDIR ${PROJECT_DIR}
 
+COPY Pipfile .
+COPY Pipfile.lock .
+
+#RUN pipenv install --deploy --ignore-pipfile
+RUN pipenv sync --dev --system
+
 COPY ./{{cookiecutter.project_slug}} ./{{cookiecutter.project_slug}}
-COPY wsgi.py ${PROJECT_DIR}/
-COPY gunicorn.conf.py ${PROJECT_DIR}/
+COPY wsgi.py ./
+COPY gunicorn.conf.py ./
 
 EXPOSE 5000
 
-CMD ["pipenv", "run", "flask", "run", "-h", "0.0.0.0"]
-#CMD ["pipenv", "run", "gunicorn", "--workers", "4", "--bind", "0.0.0.0:5000", "wsgi:app"]
+# CMD ["pipenv", "run", "flask", "run", "-h", "0.0.0.0"]
+CMD ["pipenv", "run", "ddtrace-run", "gunicorn", "--workers", "4", "--bind", "0.0.0.0:5000", "wsgi:app"]
