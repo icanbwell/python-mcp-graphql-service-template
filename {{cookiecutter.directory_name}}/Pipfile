@@ -11,7 +11,7 @@ flask="==2.2.2"
 flask_cors = "==3.0.10"
 boto3 = ">=1.26.26"
 prometheus-flask-exporter = "==0.21.0"
-gunicorn = "==20.1.0"
+gunicorn = "==20.0.4" # 20.1.0 has this issue https://github.com/benoitc/gunicorn/issues/2816
 ddtrace="==1.10.2"
 
 [dev-packages]
