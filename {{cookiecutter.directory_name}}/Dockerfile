@@ -1,5 +1,5 @@
 # Build stage for pip packages
-FROM python:3.9-bullseye as python_packages
+FROM python:3.11-bullseye as python_packages
 
 RUN apt-get update && \
     apt-get install -y git && \
@@ -27,7 +27,7 @@ RUN pipenv sync --dev --system --verbose
 RUN pip list -v
 
 
-FROM python:3.9-slim-bullseye
+FROM python:3.11-slim-bullseye
 
 # Update everything on the OS
 RUN apt-get -y update && apt-get -y install curl && apt-get clean && rm -rf /var/cache/apt/*

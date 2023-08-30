@@ -4,25 +4,25 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-wheel = ">=0.38.4"
+wheel = ">=0.41.2"
 requests = "*"
-ariadne= "==0.16.1"
-flask="==2.2.2"
-flask_cors = "==3.0.10"
-boto3 = ">=1.26.26"
-prometheus-flask-exporter = "==0.21.0"
-gunicorn = "==20.0.4" # 20.1.0 has this issue https://github.com/benoitc/gunicorn/issues/2816
-ddtrace="==1.10.2"
+ariadne= "==0.20.1"
+flask="==2.3.3"
+flask_cors = "==4.0.0"
+boto3 = ">=1.28.37"
+prometheus-flask-exporter = "==0.22.4"
+gunicorn = "==21.2.0" # 20.1.0 has this issue https://github.com/benoitc/gunicorn/issues/2816
+ddtrace="==1.18.3"
 
 [dev-packages]
-pre-commit=">=2.20.0"
-autoflake=">=2.0.0"
-mypy = ">=0.991"
-pytest = ">=7.2.0"
-black = ">=22.10.0"
-deepdiff = { version = ">=6.2.1", extras = ["murmur"] }
+pre-commit=">=3.3.3"
+autoflake=">=2.2.0"
+mypy = ">=1.5.1"
+pytest = ">=7.4.0"
+black = ">=23.7.0"
+deepdiff = { version = ">=6.3.1", extras = ["murmur"] }
 
 [requires]
-python_version = "3.9"
+python_version = "3.11"
 
 

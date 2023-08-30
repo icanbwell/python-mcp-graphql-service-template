@@ -1,10 +1,10 @@
 export LANG
 
 GIT_HASH=${CIRCLE_SHA1}
-PACKAGES_FOLDER=/usr/local/lib/python3.9/dist-packages
+PACKAGES_FOLDER=/usr/local/lib/python3.11/dist-packages
 
 Pipfile.lock: Pipfile
-	docker-compose run --rm --name helix_pipenv_{{cookiecutter.project_slug}} dev sh -c "rm -f Pipfile.lock && pipenv lock --dev --clear"
+	docker compose run --rm --name helix_pipenv_genaiservice dev sh -c "rm -f Pipfile.lock && pipenv lock --dev --clear"
 
 .PHONY:devsetup
 devsetup: ## one time setup for devs
@@ -16,27 +16,27 @@ devsetup: ## one time setup for devs
 
 .PHONY:devdocker
 devdocker: ## Builds the docker for dev
-	docker-compose build --parallel
+	docker compose build --parallel
 
 .PHONY: run
 run: ## runs Flask app
-	docker-compose run --rm --name helix_pipenv_{{cookiecutter.project_slug}} dev pipenv run flask run
+	docker compose run --rm --name helix_pipenv_genaiservice dev pipenv run flask run
 
 .PHONY: up
 up: ## starts docker containers
-	docker-compose up --build -d && \
-	echo "waiting for {{cookiecutter.project_slug}} service to become healthy" && \
-	while [ "`docker inspect --format {{ '{{.State.Health.Status}}' }} {{cookiecutter.docker_image_name}}`" != "healthy" ]; do printf "." && sleep 2; done && \
+	docker compose up --build -d && \
+	echo "waiting for genaiservice service to become healthy" && \
+	while [ "`docker inspect --format {{.State.Health.Status}} genaiservice`" != "healthy" ]; do printf "." && sleep 2; done && \
 	echo ""
-	echo "{{cookiecutter.project_slug}} Service: http://localhost:5000/graphql"
+	echo "genaiservice Service: http://localhost:5000/graphql"
 
 .PHONY: down
 down: ## stops docker containers
-	docker-compose down --remove-orphans
+	docker compose down --remove-orphans
 
 .PHONY:update
 update: Pipfile.lock setup-pre-commit  ## Updates all the packages using Pipfile
-	docker-compose run --rm --name helix_pipenv_{{cookiecutter.project_slug}} dev pipenv sync && \
+	docker compose run --rm --name helix_pipenv_genaiservice dev pipenv sync && \
 	make devdocker && \
 	make run-pre-commit && \
 	echo "In PyCharm, do File -> Invalidate Caches/Restart to refresh" && \
@@ -54,11 +54,11 @@ help: ## Show this help.
 
 .PHONY:tests
 tests: ## Runs all the tests
-	docker-compose run --rm --name {{cookiecutter.project_slug}}_tests dev pytest tests
+	docker compose run --rm --name genaiservice_tests dev pytest tests
 
 .PHONY:shell
 shell: up ## Brings up the bash shell in dev docker
-	docker-compose run --rm --name {{cookiecutter.project_slug}}_shell dev /bin/sh
+	docker compose run --rm --name genaiservice_shell dev /bin/sh
 
 .PHONY:clean-pre-commit
 clean-pre-commit: ## removes pre-commit hook
