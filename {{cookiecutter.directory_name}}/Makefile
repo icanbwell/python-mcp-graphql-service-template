@@ -4,7 +4,7 @@ GIT_HASH=${CIRCLE_SHA1}
 PACKAGES_FOLDER=/usr/local/lib/python3.11/dist-packages
 
 Pipfile.lock: Pipfile
-	docker compose run --rm --name helix_pipenv_genaiservice dev sh -c "rm -f Pipfile.lock && pipenv lock --dev --clear"
+	docker compose run --rm --name helix_pipenv_{{cookiecutter.docker_image_name}} dev sh -c "rm -f Pipfile.lock && pipenv lock --dev --clear"
 
 .PHONY:devsetup
 devsetup: ## one time setup for devs
@@ -20,15 +20,15 @@ devdocker: ## Builds the docker for dev
 
 .PHONY: run
 run: ## runs Flask app
-	docker compose run --rm --name helix_pipenv_genaiservice dev pipenv run flask run
+	docker compose run --rm --name helix_pipenv_{{cookiecutter.docker_image_name}} dev pipenv run flask run
 
 .PHONY: up
 up: ## starts docker containers
 	docker compose up --build -d && \
-	echo "waiting for genaiservice service to become healthy" && \
-	while [ "`docker inspect --format {{.State.Health.Status}} genaiservice`" != "healthy" ]; do printf "." && sleep 2; done && \
+	echo "waiting for {{cookiecutter.docker_image_name}} service to become healthy" && \
+	while [ "`docker inspect --format {{.State.Health.Status}} {{cookiecutter.docker_image_name}}`" != "healthy" ]; do printf "." && sleep 2; done && \
 	echo ""
-	echo "genaiservice Service: http://localhost:5000/graphql"
+	echo "{{cookiecutter.docker_image_name}} Service: http://localhost:5000/graphql"
 
 .PHONY: down
 down: ## stops docker containers
@@ -36,7 +36,7 @@ down: ## stops docker containers
 
 .PHONY:update
 update: Pipfile.lock setup-pre-commit  ## Updates all the packages using Pipfile
-	docker compose run --rm --name helix_pipenv_genaiservice dev pipenv sync && \
+	docker compose run --rm --name helix_pipenv_{{cookiecutter.docker_image_name}} dev pipenv sync && \
 	make devdocker && \
 	make run-pre-commit && \
 	echo "In PyCharm, do File -> Invalidate Caches/Restart to refresh" && \
@@ -54,11 +54,11 @@ help: ## Show this help.
 
 .PHONY:tests
 tests: ## Runs all the tests
-	docker compose run --rm --name genaiservice_tests dev pytest tests
+	docker compose run --rm --name {{cookiecutter.docker_image_name}}_tests dev pytest tests
 
 .PHONY:shell
 shell: up ## Brings up the bash shell in dev docker
-	docker compose run --rm --name genaiservice_shell dev /bin/sh
+	docker compose run --rm --name {{cookiecutter.docker_image_name}}_shell dev /bin/sh
 
 .PHONY:clean-pre-commit
 clean-pre-commit: ## removes pre-commit hook
