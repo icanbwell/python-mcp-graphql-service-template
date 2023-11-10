@@ -4,7 +4,7 @@ from typing import Tuple
 from ariadne import graphql_sync
 
 # noinspection PyPackageRequirements
-from ariadne.constants import PLAYGROUND_HTML
+from ariadne.explorer import ExplorerPlayground
 
 # noinspection PyPackageRequirements
 from flask.app import Flask
@@ -26,6 +26,8 @@ from {{cookiecutter.project_slug}}.api_schema import ApiSchema
 
 
 app = Flask(__name__)
+
+PLAYGROUND_HTML = ExplorerPlayground(title="{{cookiecutter.project_slug}}").html(None)
 
 metrics = GunicornInternalPrometheusMetrics(app)
 app.config["CORS_HEADERS"] = "Content-Type"
