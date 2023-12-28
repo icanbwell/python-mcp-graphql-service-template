@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: person-matching
+  IMAGE_NAME: {{cookiecutter.docker_image_name}}
   REPOSITORY_URL: 856965016623.dkr.ecr.us-east-1.amazonaws.com
 
 jobs:
