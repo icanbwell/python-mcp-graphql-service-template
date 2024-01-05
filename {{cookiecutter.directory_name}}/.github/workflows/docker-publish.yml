@@ -7,7 +7,7 @@ on:
 
 env:
   IMAGE_NAME: {{cookiecutter.docker_image_name}}
-  REPOSITORY_URL: 856965016623.dkr.ecr.us-east-1.amazonaws.com
+  REPOSITORY_URL: ##############.dkr.ecr.us-east-1.amazonaws.com
 
 jobs:
   # See also https://docs.docker.com/docker-hub/builds/
