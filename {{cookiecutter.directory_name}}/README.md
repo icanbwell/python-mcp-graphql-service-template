@@ -47,5 +47,5 @@ multiple test cases. For example testing filtering by distance using multiple va
 [that example is here](https://github.com/icanbwell/helix.providersearch/tree/main/tests/end_to_end/test_filter_by_distance)
 .
 
-
-
+## Correct workflow
+Verify that the workflow under `.github/workflows/docker-publish.yml` under env.IMAGE_NAME matches the container_name in docker-compose.yml. Also, you will need to create an ECR in AWS and copy the URI to the REPOSITORY_URL variable in the same file.

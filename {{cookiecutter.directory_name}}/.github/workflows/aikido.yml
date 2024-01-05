@@ -15,7 +15,7 @@ jobs:
       - name: Detect new vulnerabilities
         uses: AikidoSec/github-actions-workflow@v1.0.6
         with:
-            secret-key: ${{ secrets.AIKIDO_SECRET_KEY }}
+            secret-key: {% raw %}${{ secrets.AIKIDO_SECRET_KEY }}{% endraw %}
             fail-on-timeout: false
             fail-on-dependency-scan: true
             fail-on-sast-scan: true
