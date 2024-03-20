@@ -1,16 +1,23 @@
 from typing import Generator
+import logging
+import os
 
 import pytest
-from flask.testing import FlaskClient
+from fastapi.testclient import TestClient
 
 from {{cookiecutter.project_slug}} import api
 
 
 @pytest.fixture
-def graphql_client() -> Generator[FlaskClient, None, None]:
+def graphql_client() -> Generator[TestClient, None, None]:
     app = api.app
-    app.config["TESTING"] = True
+    # app.config["TESTING"] = True
 
-    with app.app_context():
-        with app.test_client() as client:
-            yield client
+    # Get log level from environment variable
+    log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+
+    # Set up basic configuration for logging
+    logging.basicConfig(level=getattr(logging, log_level))
+
+    client = TestClient(app)
+    yield client  # Use `yield` to ensure any teardown can happen after the test runs

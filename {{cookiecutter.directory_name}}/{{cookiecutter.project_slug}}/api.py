@@ -1,70 +1,66 @@
-from typing import Tuple
+import logging
+import os
+from typing import Optional
 
-# noinspection PyPackageRequirements
-from ariadne import graphql_sync
-
-# noinspection PyPackageRequirements
+# Since graphql_sync is used, assuming a similar synchronous approach is acceptable
+from ariadne import graphql
 from ariadne.explorer import ExplorerPlayground
-
-# noinspection PyPackageRequirements
-from flask.app import Flask
-
-# noinspection PyPackageRequirements
-from flask.globals import request
-
-# noinspection PyPackageRequirements
-from flask.json import jsonify
-
-# noinspection PyPackageRequirements
-from flask.wrappers import Response
-from flask_cors import CORS, cross_origin
-
-# an extension targeted at Gunicorn deployments for prometheus scraping in flask applications
-from prometheus_flask_exporter.multiprocess import GunicornInternalPrometheusMetrics
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, HTMLResponse
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from {{cookiecutter.project_slug}}.api_schema import ApiSchema
 
+# Get log level from environment variable
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 
-app = Flask(__name__)
+# Set up basic configuration for logging
+logging.basicConfig(level=getattr(logging, log_level))
 
-PLAYGROUND_HTML = ExplorerPlayground(title="{{cookiecutter.project_slug}}").html(None)
+app = FastAPI()
 
-metrics = GunicornInternalPrometheusMetrics(app)
-app.config["CORS_HEADERS"] = "Content-Type"
-CORS(app, resources={r"/graphql": {"origins": "*"}}, max_age=360)
+PLAYGROUND_HTML: Optional[str] = ExplorerPlayground(title="{{cookiecutter.project_slug}}").html(None)  # type: ignore[no-untyped-call]
 
+# Set up CORS middleware; adjust parameters as needed
+# noinspection PyTypeChecker
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.route("/")
-def hello() -> Tuple[str, int]:
-    return "Use /graphql endpoint to test", 200
-
-
-@app.route("/health")
-def health() -> Tuple[str, int]:
-    return "OK", 200
-
-
-@app.route("/graphql", methods=["GET"])
-@cross_origin(origin="*")
-def graphql_playground() -> Tuple[str, int]:
-    return PLAYGROUND_HTML, 200
+# noinspection SpellCheckingInspection
+instrumentator = Instrumentator()
+instrumentator.instrument(app).expose(app)
 
 
-@app.route("/graphql", methods=["POST"])
-@cross_origin(origin="*")
-def graphql_server() -> Tuple[Response, int]:
-    data = request.get_json()
-    print(f"API call [{request.remote_addr}] {data!r}")
+@app.get("/", response_class=HTMLResponse)
+def hello() -> str:
+    return "Use /graphql endpoint to test"
 
-    success, result = graphql_sync(
+
+@app.get("/health")
+def health() -> str:
+    return "OK"
+
+
+@app.get("/graphql", response_class=HTMLResponse)
+def graphql_playground() -> str:
+    assert PLAYGROUND_HTML is not None
+    return PLAYGROUND_HTML
+
+
+@app.post("/graphql")
+async def graphql_server(request: Request) -> JSONResponse:
+    data = await request.json()
+    print(f"API call [{request.client.host if request.client else None}] {data!r}")
+
+    success, result = await graphql(
         ApiSchema.schema, data, context_value=request, debug=app.debug
     )
 
     status_code = 200 if success else 400
-    return jsonify(result), status_code
-
-
-if __name__ == "__main__":
-    app.config["CORS_HEADERS"] = "Content-Type"
-    CORS(app, resources={r"/graphql": {"origins": "*"}})
-    app.run()
+    return JSONResponse(result, status_code=status_code)

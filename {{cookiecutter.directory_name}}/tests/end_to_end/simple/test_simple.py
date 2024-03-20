@@ -1,11 +1,11 @@
 from pathlib import Path
 
-from flask.testing import FlaskClient
+from fastapi.testclient import TestClient
 
-from tests.end_to_end.test_runner import run_test_runner
+from {{cookiecutter.project_slug}}.utilities.test_runner import run_test_runner
 
 
-def test_simple(graphql_client: FlaskClient) -> None:
+async def test_simple(graphql_client: TestClient) -> None:
     # Arrange
     data_dir: Path = Path(__file__).parent.joinpath("./")
 

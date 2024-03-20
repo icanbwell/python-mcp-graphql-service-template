@@ -29,7 +29,7 @@ class ApiSchema:
 
     query: QueryType = QueryType()
     query.set_field(
-        "providers", SearchResolverProvider(results_provider).resolve_providers
+        "providers", SearchResolverProvider(results_provider).resolve_async
     )
 
     mutation = MutationType()

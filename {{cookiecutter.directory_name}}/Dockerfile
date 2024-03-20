@@ -1,5 +1,5 @@
 # Build stage for pip packages
-FROM python:3.11-bullseye as python_packages
+FROM python:3.11-bookworm as python_packages
 
 RUN apt-get update && \
     apt-get install -y git && \
@@ -27,7 +27,7 @@ RUN pipenv sync --dev --system --verbose
 RUN pip list -v
 
 
-FROM python:3.11-slim-bullseye
+FROM python:3.11-slim-bookworm
 
 # Update everything on the OS
 RUN apt-get -y update && apt-get -y install curl && apt-get clean && rm -rf /var/cache/apt/*
@@ -52,10 +52,8 @@ COPY Pipfile.lock .
 RUN pipenv sync --dev --system
 
 COPY ./{{cookiecutter.project_slug}} ./{{cookiecutter.project_slug}}
-COPY wsgi.py ./
-COPY gunicorn.conf.py ./
 
 EXPOSE 5000
 
 # CMD ["pipenv", "run", "flask", "run", "-h", "0.0.0.0"]
-CMD ["pipenv", "run", "ddtrace-run", "gunicorn", "--workers", "4", "--bind", "0.0.0.0:5000", "wsgi:app"]
+CMD ["pipenv", "run", "ddtrace-run", "uvicorn", "{{cookiecutter.project_slug}}.api:app", "--host", "0.0.0.0", "--port", "5000", "--workers", "4"]

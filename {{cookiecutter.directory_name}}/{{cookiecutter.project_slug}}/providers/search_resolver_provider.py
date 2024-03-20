@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from graphql import GraphQLResolveInfo
 
@@ -9,11 +9,21 @@ class SearchResolverProvider:
     def __init__(self, results_provider: ResultsProvider):
         self.results_provider = results_provider
 
-    def resolve_providers(
+    async def resolve_async(
         self,
         obj: Any,
         info: GraphQLResolveInfo,
         *,  # force keyword only args from this point forward
         query_id: str,
+        query: str,
+        client: Optional[str] = None,
+        test: bool = False,
     ) -> Dict[str, Any]:
-        return self.results_provider.get_results(query_id=query_id)
+        """
+        query_id: str,
+        query: str,
+        client: Optional[str] = None
+        """
+        return await self.results_provider.get_results_async(
+            query_id=query_id, query=query, client=client, test=test
+        )
