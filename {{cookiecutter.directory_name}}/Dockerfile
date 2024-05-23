@@ -48,8 +48,9 @@ WORKDIR ${PROJECT_DIR}
 COPY Pipfile .
 COPY Pipfile.lock .
 
-#RUN pipenv install --deploy --ignore-pipfile
-RUN pipenv sync --dev --system
+# Copy installed packages from the first stage
+COPY --from=python_packages /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=python_packages /usr/local/bin /usr/local/bin
 
 COPY ./{{cookiecutter.project_slug}} ./{{cookiecutter.project_slug}}
 
