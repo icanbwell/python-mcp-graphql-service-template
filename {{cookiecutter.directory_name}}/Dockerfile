@@ -1,5 +1,8 @@
 # Build stage for pip packages
-FROM python:3.11-bookworm as python_packages
+FROM python:3.12-bookworm as python_packages
+
+# Define an argument to control whether to run pipenv lock (used for updating Pipfile.lock)
+ARG RUN_PIPENV_LOCK=false
 
 RUN apt-get update && \
     apt-get install -y git && \
@@ -21,13 +24,17 @@ ENV PYTHONPATH "/opt/{{cookiecutter.directory_name}}:${PYTHONPATH}"
 COPY Pipfile* /{{cookiecutter.directory_name}}/
 WORKDIR /{{cookiecutter.directory_name}}
 
+# Conditionally run pipenv lock to update the Pipfile.lock based on the argument provided
+# If RUN_PIPENV_LOCK is true, it regenerates the Pipfile.lock file with the latest versions of dependencies
+RUN if [ "$RUN_PIPENV_LOCK" = "true" ]; then echo "Locking Pipfile" && rm -f Pipfile.lock && pipenv lock --dev --clear --verbose --extra-pip-args="--prefer-binary"; fi
+
 #RUN pipenv sync --system --verbose # This should not be needed because the line below covers system also
 RUN pipenv sync --dev --system --verbose
 
 RUN pip list -v
 
 
-FROM python:3.11-slim-bookworm
+FROM python:3.12-slim-bookworm
 
 # Update everything on the OS
 RUN apt-get -y update && apt-get -y install curl && apt-get clean && rm -rf /var/cache/apt/*
@@ -49,7 +56,7 @@ COPY Pipfile .
 COPY Pipfile.lock .
 
 # Copy installed packages from the first stage
-COPY --from=python_packages /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=python_packages /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=python_packages /usr/local/bin /usr/local/bin
 
 COPY ./{{cookiecutter.project_slug}} ./{{cookiecutter.project_slug}}

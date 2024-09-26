@@ -1,7 +1,7 @@
 export LANG
 
 GIT_HASH=${CIRCLE_SHA1}
-PACKAGES_FOLDER=/usr/local/lib/python3.11/dist-packages
+PACKAGES_FOLDER=/usr/local/lib/python3.12/dist-packages
 
 Pipfile.lock: Pipfile
 	docker compose run --rm --name helix_pipenv_{{cookiecutter.docker_image_name}} dev sh -c "rm -f Pipfile.lock && pipenv lock --dev --clear"

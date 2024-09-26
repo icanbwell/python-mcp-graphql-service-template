@@ -24,7 +24,7 @@ black = ">=24.2.0"
 deepdiff = { version = ">=6.7.1", extras = ["murmur"] }
 
 [requires]
-python_version = "3.11"
+python_version = "3.12"
 
 [pipenv]
 allow_prereleases = false
