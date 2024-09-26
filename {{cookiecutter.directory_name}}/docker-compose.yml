@@ -12,10 +12,9 @@ services:
       LOG_LEVEL: INFO
     env_file: docker.env
     ports:
-      - '5000:5000'
+      - '5050:5000'
     volumes:
     - ./:/usr/src/{{cookiecutter.directory_name}}/:cached
-    - ./tests:/usr/src/{{cookiecutter.directory_name}}/tests/:cached
     healthcheck:
       test: curl --fail -s http://localhost:5000/health || exit 1
       interval: 1m30s

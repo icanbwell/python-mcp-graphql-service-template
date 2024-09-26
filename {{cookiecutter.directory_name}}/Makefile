@@ -1,10 +1,9 @@
 export LANG
 
-GIT_HASH=${CIRCLE_SHA1}
-PACKAGES_FOLDER=/usr/local/lib/python3.12/dist-packages
-
-Pipfile.lock: Pipfile
-	docker compose run --rm --name helix_pipenv_{{cookiecutter.docker_image_name}} dev sh -c "rm -f Pipfile.lock && pipenv lock --dev --clear"
+.PHONY: Pipfile.lock
+Pipfile.lock: # Locks Pipfile and updates the Pipfile.lock on the local file system
+	docker compose --progress=plain build --no-cache --build-arg RUN_PIPENV_LOCK=true dev && \
+	docker compose --progress=plain run dev sh -c "cp -f /tmp/Pipfile.lock /{{cookiecutter.directory_name}}/Pipfile.lock"
 
 .PHONY:devsetup
 devsetup: ## one time setup for devs
@@ -28,7 +27,7 @@ up: ## starts docker containers
 	echo "waiting for {{cookiecutter.docker_image_name}} service to become healthy" && \
 	while [ "`docker inspect --format {% raw %}{{.State.Health.Status}}{% endraw %} {{cookiecutter.docker_image_name}}`" != "healthy" ]; do printf "." && sleep 2; done && \
 	echo ""
-	echo "{{cookiecutter.docker_image_name}} Service: http://localhost:5000/graphql"
+	echo "{{cookiecutter.docker_image_name}} Service: http://localhost:5050/graphql"
 
 .PHONY: down
 down: ## stops docker containers
@@ -36,7 +35,6 @@ down: ## stops docker containers
 
 .PHONY:update
 update: Pipfile.lock setup-pre-commit  ## Updates all the packages using Pipfile
-	docker compose run --rm --name helix_pipenv_{{cookiecutter.docker_image_name}} dev pipenv sync && \
 	make devdocker && \
 	make run-pre-commit && \
 	echo "In PyCharm, do File -> Invalidate Caches/Restart to refresh" && \

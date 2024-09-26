@@ -8,7 +8,7 @@ make devsetup
 make up
 ```
 
-Then navigate to: http://localhost:5000/graphql
+Then navigate to: http://localhost:5050/graphql
 
 1. Simple query
 
