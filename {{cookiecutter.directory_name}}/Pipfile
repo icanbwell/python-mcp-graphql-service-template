@@ -31,19 +31,19 @@ python-crfsuite = {version = "==0.9.10", index = "alpine-wheels"}
 
 [dev-packages]
 # pre-commit is a Python library for running pre-commit checks
-pre-commit=">=3.6.1"
+pre-commit=">=3.8.0"
 # autoflake is a Python library for removing unused imports
-autoflake=">=2.2.0"
+autoflake=">=2.3.1"
 # mypy is a Python library for type checking
-mypy = ">=1.8.0"
+mypy = ">=1.11.2"
 # pytest is a Python library for running tests
-pytest = ">=8.1.1"
+pytest = ">=8.3.3"
 # pytest-asyncio is a Python library for running asyncio tests
-pytest-asyncio = ">=0.23.6"
+pytest-asyncio = ">=0.24.0"
 # black is a Python library for formatting code
-black = ">=24.2.0"
+black = ">=24.8.0"
 # deepdiff is a Python library for comparing objects
-deepdiff = { version = ">=6.7.1", extras = ["murmur"] }
+deepdiff = { version = ">=8.0.1", extras = ["murmur"] }
 types-requests = "*"
 
 [requires]

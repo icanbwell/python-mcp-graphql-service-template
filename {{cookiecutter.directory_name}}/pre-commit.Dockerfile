@@ -11,5 +11,4 @@ RUN pipenv sync --dev --system
 WORKDIR /sourcecode
 RUN apt-get clean
 RUN git config --global --add safe.directory /sourcecode
-CMD if [ "$PRE_COMMIT_ALL_FILES" = true ] ; then pre-commit run --all-files ; \
-    else pre-commit run ; fi
+CMD ["pre-commit", "run", "--all-files"]
