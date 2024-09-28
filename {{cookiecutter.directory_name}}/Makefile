@@ -55,7 +55,7 @@ tests: ## Runs all the tests
 	docker compose run --rm --name {{cookiecutter.docker_image_name}}_tests dev pytest tests
 
 .PHONY:shell
-shell: up ## Brings up the bash shell in dev docker
+shell: ## Brings up the bash shell in dev docker
 	docker compose run --rm --name {{cookiecutter.docker_image_name}}_shell dev /bin/sh
 
 .PHONY:clean-pre-commit
