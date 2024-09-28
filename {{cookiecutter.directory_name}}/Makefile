@@ -13,8 +13,8 @@ devsetup: ## one time setup for devs
 	make tests && \
 	make up
 
-.PHONY:devdocker
-devdocker: ## Builds the docker for dev
+.PHONY:build
+build: ## Builds the docker for dev
 	docker compose build --parallel
 
 .PHONY: run
@@ -35,7 +35,7 @@ down: ## stops docker containers
 
 .PHONY:update
 update: Pipfile.lock setup-pre-commit  ## Updates all the packages using Pipfile
-	make devdocker && \
+	make build && \
 	make run-pre-commit && \
 	echo "In PyCharm, do File -> Invalidate Caches/Restart to refresh" && \
 	echo "If you encounter issues with remote sources being out of sync, click on the 'Remote Python' feature on" && \
