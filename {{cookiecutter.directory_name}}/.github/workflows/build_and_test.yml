@@ -38,5 +38,5 @@ jobs:
         if: always()
         run: |
           ls -la ./
-          sudo rm -rf ${{ github.workspace }}/*
+          sudo rm -rf {{ '${{ github.workspace }}' }}/*
           ls -la ./
