@@ -5,13 +5,13 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from deepdiff import DeepDiff  # For Deep Difference of 2 objects
-from flask.testing import FlaskClient
+from fastapi.testclient import TestClient
 from tests.end_to_end.exception_test import ExceptionInTestRunner
 
 
 def run_test_runner(
     data_dir: Path,
-    graphql_client: FlaskClient,
+    graphql_client: TestClient,
     test_name: str,
     run_only_test: Optional[str] = None,
     validate_order_in_json: bool = True,
@@ -69,5 +69,3 @@ def run_test_runner(
         )
         assert len(differences) == 0, f"{graphql_file_name}: {differences!r}"
     assert found_file, "No test file was found"
-
-

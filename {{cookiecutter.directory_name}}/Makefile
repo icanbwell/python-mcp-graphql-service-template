@@ -3,7 +3,7 @@ export LANG
 .PHONY: Pipfile.lock
 Pipfile.lock: # Locks Pipfile and updates the Pipfile.lock on the local file system
 	docker compose --progress=plain build --no-cache --build-arg RUN_PIPENV_LOCK=true dev && \
-	docker compose --progress=plain run dev sh -c "cp -f /tmp/Pipfile.lock /{{cookiecutter.directory_name}}/Pipfile.lock"
+	docker compose --progress=plain run dev sh -c "cp -f /tmp/Pipfile.lock /usr/src/{{cookiecutter.directory_name}}/Pipfile.lock"
 
 .PHONY:devsetup
 devsetup: ## one time setup for devs
@@ -16,10 +16,6 @@ devsetup: ## one time setup for devs
 .PHONY:build
 build: ## Builds the docker for dev
 	docker compose build --parallel
-
-.PHONY: run
-run: ## runs Flask app
-	docker compose run --rm --name helix_pipenv_{{cookiecutter.docker_image_name}} dev pipenv run flask run
 
 .PHONY: up
 up: ## starts docker containers

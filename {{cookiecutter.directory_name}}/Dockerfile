@@ -67,7 +67,6 @@ RUN pip install --no-cache-dir pipenv
 
 # Set environment variables for project configuration
 ENV PROJECT_DIR=/usr/src/{{cookiecutter.directory_name}}
-ENV FLASK_APP={{cookiecutter.project_slug}}.api
 ENV PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
 ENV PIP_ROOT_USER_ACTION=ignore
 
