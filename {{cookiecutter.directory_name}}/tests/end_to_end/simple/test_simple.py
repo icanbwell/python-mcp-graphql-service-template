@@ -2,14 +2,14 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from {{cookiecutter.project_slug}}.utilities.test_runner import run_test_runner
+from {{cookiecutter.project_slug}}.utilities.test_runner import run_test_runner_async
 
 
 async def test_simple(graphql_client: TestClient) -> None:
     # Arrange
     data_dir: Path = Path(__file__).parent.joinpath("./")
 
-    run_test_runner(
+    await run_test_runner_async(
         data_dir=data_dir,
         graphql_client=graphql_client,
         test_name="test_simple",
