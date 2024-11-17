@@ -135,3 +135,5 @@ dmypy.json
 
 /data/
 /tests_integration/index/
+
+docker.env
