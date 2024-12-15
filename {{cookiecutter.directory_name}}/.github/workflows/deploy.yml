@@ -1,0 +1,50 @@
+name: {{cookiecutter.docker_image_name}} - Deploy
+run-name: {{cookiecutter.docker_image_name}} to ${{ inputs.env }} - ${{ inputs.tag }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        description: Tag to deploy
+        required: true
+      env:
+        type: choice
+        description: Environment to be deployed
+        required: true
+        options:
+          - dev-ue1
+          - staging-ue1
+          - prod-ue1
+          - client-sandbox-ue1
+    secrets:
+      BWELL_DEV_PAT:
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: [self-hosted, main]
+    env:
+      SERVICE_NAME: {{cookiecutter.docker_image_name}}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Checkout icanbwell/cie.gha-deploy
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          repository: icanbwell/cie.gha-deploy
+          token: ${{ secrets.BWELL_DEV_PAT }}
+          path: .github/actions/cie.gha-deploy
+
+      - name: Deploy
+        uses: ./.github/actions/cie.gha-deploy
+        with:
+          token: ${{ secrets.BWELL_DEV_PAT }}
+          service-name: ${{ env.SERVICE_NAME }}
+          env: ${{ inputs.env }}
+          helm-values-dir: '.helm/${{ env.SERVICE_NAME }}'
+          image-tag: ${{ inputs.tag }}

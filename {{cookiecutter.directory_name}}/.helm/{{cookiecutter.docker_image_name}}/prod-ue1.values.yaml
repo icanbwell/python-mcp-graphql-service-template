@@ -1,0 +1,18 @@
+
+bwell:
+  environment: "prod-ue1"
+  iamRole: arn:aws:iam::400686897767:role/prod-irsa-complaint-parser
+  ingress:
+    internal:
+      enabled: true
+      hosts:
+        - host: {{cookiecutter.docker_image_name}}.prod.bwell.zone
+          paths:
+            - "/"
+        - host: {{cookiecutter.docker_image_name}}.prod-ue1.bwell.zone
+          paths:
+            - "/"
+    external:
+      enabled: false
+
+  env:

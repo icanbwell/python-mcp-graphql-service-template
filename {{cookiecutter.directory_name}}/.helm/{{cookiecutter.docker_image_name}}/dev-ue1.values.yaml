@@ -1,0 +1,18 @@
+
+bwell:
+  environment: "dev-ue1"
+  iamRole: arn:aws:iam::875300655693:role/dev-irsa-{{cookiecutter.docker_image_name}}
+  ingress:
+    internal:
+      enabled: true
+      hosts:
+        - host: {{cookiecutter.docker_image_name}}.dev.bwell.zone
+          paths:
+            - "/"
+        - host: {{cookiecutter.docker_image_name}}.dev-ue1.bwell.zone
+          paths:
+            - "/"
+    external:
+      enabled: false
+
+  env:
