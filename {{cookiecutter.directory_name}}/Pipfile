@@ -3,12 +3,6 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
-[[source]]
-name = "alpine-wheels"
-# https://github.com/imranq2/alpine-wheels/
-url = "https://imranq2.github.io/alpine-wheels/docs/"
-verify_ssl = true
-
 [packages]
 # wheel is needed for building the package and installing wheels
 wheel = ">=0.43.0"
@@ -27,7 +21,7 @@ ddtrace=">=2.6.3"
 # prometheus-fastapi-instrumentator is a Python library for instrumenting FastAPI applications
 prometheus-fastapi-instrumentator = ">=7.0.0"
 # python-crfsuite is a Python library used when installing some packages
-python-crfsuite = {version = "==0.9.10", index = "alpine-wheels"}
+python-crfsuite = ">=0.9.11"
 # httpx is a Python library for making HTTP requests
 httpx = ">=0.27.2"
 
