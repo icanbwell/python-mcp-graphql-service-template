@@ -1,5 +1,5 @@
 name: {{cookiecutter.docker_image_name}} - Deploy
-run-name: {{cookiecutter.docker_image_name}} to ${{ inputs.env }} - ${{ inputs.tag }}
+run-name: {{cookiecutter.docker_image_name}} to ${{ inputs.env }} - '${{ inputs.env }}'
 
 on:
   workflow_dispatch:
