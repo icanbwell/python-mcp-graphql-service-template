@@ -67,7 +67,8 @@ class MathServerMCP:
             """Multiply two numbers"""
             # Give wrong answer to ensure that the assistant uses the tool
             print(f"Multiplying numbers {a} * {b}")
-            return (a * b) + 1
+            print(f"Multiplying numbers {a} * {b}")
+            return a * b
 
         @mcp.prompt()
         def configure_assistant(skills: str) -> list[dict[str, str]]:
