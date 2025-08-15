@@ -1,9 +1,9 @@
 name: {{cookiecutter.docker_image_name}} - Deploy
-run-name: {{cookiecutter.docker_image_name}} to {{ "${{ inputs.env }}" }} - {{ "${{ inputs.tag }}" }}
+run-name: {{cookiecutter.docker_image_name}} to {{ "${{ inputs.env }}" }} - {{ "${{ inputs.env }}" }}
 
 on:
   workflow_dispatch:
-    {{ "inputs" }}:
+    {{"inputs"}}:
       tag:
         type: string
         description: Tag to deploy
@@ -21,30 +21,40 @@ on:
       BWELL_DEV_PAT:
         required: true
 
+env:
+  SERVICE_NAME: {{cookiecutter.docker_image_name}}
+  SERVICE_NAMESPACE: {{cookiecutter.docker_image_name}}-{{ "${{ inputs.env }}" }}
+
 jobs:
   deploy:
     name: Deploy
-    runs-on: [self-hosted, main]
-    env:
-      SERVICE_NAME: {{cookiecutter.docker_image_name}}
-
+    runs-on: main
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Checkout icanbwell/cie.gha-deploy
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           repository: icanbwell/cie.gha-deploy
-          token: ${{ secrets.BWELL_DEV_PAT }}
+          token: {{ "${{ secrets.BWELL_DEV_PAT }}" }}
           path: .github/actions/cie.gha-deploy
 
       - name: Deploy
         uses: ./.github/actions/cie.gha-deploy
         with:
-          token: ${{ secrets.BWELL_DEV_PAT }}
-          service-name: ${{ env.SERVICE_NAME }}
+          token: {{ "${{ secrets.BWELL_DEV_PAT }}" }}
+          service-name: {{ "$SERVICE_NAME" }}
+          service-namespace: {{ "$SERVICE_NAMESPACE" }}
           env: {{ "${{ inputs.env }}" }}
-          helm-values-dir: '.helm/${{ env.SERVICE_NAME }}'
-          image-tag: {{ "${{ inputs.tag }}" }}
+          image-tag: {{ "${{ github.event.inputs.tag }}" }}
+
+      - name: 'Cleanup build folder'
+        if: always()
+        run: |
+          ls -la ./
+          sudo rm -rf {{ "${{ github.workspace }}/*" }}
+          ls -la ./
