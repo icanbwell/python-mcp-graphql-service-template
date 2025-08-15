@@ -77,6 +77,7 @@ math_server_mcp_app = MathServerMCP.get_app()
 
 app = FastAPI(
         lifespan=create_composite_lifespan(
+            math_server_mcp_app.lifespan,
             app_lifespan,
         )
     )
