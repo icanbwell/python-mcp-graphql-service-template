@@ -23,7 +23,7 @@ on:
 
 env:
   SERVICE_NAME: {{cookiecutter.docker_image_name}}
-  SERVICE_NAMESPACE: {{cookiecutter.docker_image_name}}-${{ inputs.env }}
+  SERVICE_NAMESPACE: {{cookiecutter.docker_image_name}}-'${{ inputs.env }}'
 
 jobs:
   deploy:
