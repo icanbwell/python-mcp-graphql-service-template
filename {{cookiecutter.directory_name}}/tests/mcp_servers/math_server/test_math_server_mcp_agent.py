@@ -1,9 +1,7 @@
-import os
-from typing import Any, List, Optional
+from typing import Any, List
 from urllib.parse import urljoin
 
 import httpx
-import pytest
 from fastmcp import Client
 from fastmcp.client import StreamableHttpTransport
 from fastmcp.client.client import CallToolResult
@@ -17,9 +15,6 @@ from mcp.types import (
     ResourceLink,
     EmbeddedResource,
 )
-from openai import AsyncOpenAI
-from openai.types.responses import Response
-from openai.types.responses.tool_param import Mcp
 
 from {{cookiecutter.project_slug}}.mcp_servers.math_server.math_server import MathServerMCP
 

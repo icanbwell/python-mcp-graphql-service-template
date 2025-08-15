@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from ariadne import (
     load_schema_from_path,
@@ -21,7 +21,7 @@ datetime_scalar = ScalarType("DateTime")
 
 @datetime_scalar.serializer
 def serialize_datetime(value: Any) -> str:
-    return value.isoformat()
+    return cast(str, value.isoformat())
 
 
 class ApiSchema:

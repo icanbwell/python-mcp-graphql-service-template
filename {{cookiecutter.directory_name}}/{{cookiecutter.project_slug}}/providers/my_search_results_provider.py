@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from {{cookiecutter.project_slug}}.providers.results_provider import ResultsProvider
 
