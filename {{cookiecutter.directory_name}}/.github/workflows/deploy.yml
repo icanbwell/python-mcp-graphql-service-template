@@ -1,9 +1,9 @@
 name: {{cookiecutter.docker_image_name}} - Deploy
-run-name: {{cookiecutter.docker_image_name}} to ${{ inputs.env }} - ${{ inputs.tag }}
+run-name: {{cookiecutter.docker_image_name}} to {{ "${{ inputs.env }}" }} - {{ "${{ inputs.tag }}" }}
 
 on:
   workflow_dispatch:
-    inputs:
+    {{ "inputs" }}:
       tag:
         type: string
         description: Tag to deploy
@@ -45,6 +45,6 @@ jobs:
         with:
           token: ${{ secrets.BWELL_DEV_PAT }}
           service-name: ${{ env.SERVICE_NAME }}
-          env: ${{ inputs.env }}
+          env: {{ "${{ inputs.env }}" }}
           helm-values-dir: '.helm/${{ env.SERVICE_NAME }}'
-          image-tag: ${{ inputs.tag }}
+          image-tag: {{ "${{ inputs.tag }}" }}
