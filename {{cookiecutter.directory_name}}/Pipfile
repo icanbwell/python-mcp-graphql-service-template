@@ -24,6 +24,14 @@ prometheus-fastapi-instrumentator = ">=7.0.0"
 python-crfsuite = ">=0.9.11"
 # httpx is a Python library for making HTTP requests
 httpx = ">=0.27.2"
+# for testing the MCP client
+mcp = ">=1.11.0"
+# for creating the MCP client to test
+fastmcp = ">=2.11.0"
+# authlib is a Python library for OAuth and OpenID Connect
+authlib = ">=1.6.1"
+# joserfc is a Python library for working with JOSE (JSON Object Signing and Encryption)
+joserfc = ">=1.2.2"
 
 [dev-packages]
 # pre-commit is a Python library for running pre-commit checks
@@ -41,6 +49,25 @@ black = ">=24.8.0"
 # deepdiff is a Python library for comparing objects
 deepdiff = { version = ">=8.0.1", extras = ["murmur"] }
 types-requests = "*"
+# types-beautifulsoup is a Python library for typing BeautifulSoup
+types-beautifulsoup4 = ">=4.12.0.20241020"
+# These packages are for testing the MCP gateway
+# openai is a Python library for interacting with OpenAI
+openai = ">=1.97.0"
+# for testing the MCP client
+mcp = ">=1.11.0"
+# asgi-lifespan is a Python library for managing ASGI lifespan events
+asgi-lifespan = ">=2.1.0"
+# respx is a Python library for mocking HTTP requests in tests
+respx = ">=0.22.0"
+# types-Authlib is a Python library for typing Authlib
+types-Authlib = ">=1.6.0"
+# bandit is needed for security checks
+bandit = ">=1.8.3"
+# ruff is needed for linting
+ruff = ">=0.11.5"
+# types-boto3 provides type hints for boto3
+types-boto3 = { version = ">=1.40.0"}
 
 [requires]
 python_version = "3.12"

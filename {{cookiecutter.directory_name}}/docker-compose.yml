@@ -14,6 +14,7 @@ services:
       - '5050:5000'
     volumes:
     - ./:/usr/src/{{cookiecutter.directory_name}}/
+    command: ["uvicorn", "{{cookiecutter.project_slug}}.api:app", "--host", "0.0.0.0", "--port", "5000", "--reload", "--log-level", "debug"]
     healthcheck:
       test: curl --fail -s http://localhost:5000/health || exit 1
       interval: 1m30s
