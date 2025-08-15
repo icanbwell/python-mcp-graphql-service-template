@@ -6,7 +6,6 @@ from asgi_lifespan import LifespanManager
 from httpx import AsyncClient
 from starlette.testclient import TestClient
 
-from mcp_server_gateway.api_creator import create_app
 from tests.common import create_async_client_unopened
 
 from typing import Generator
@@ -16,12 +15,11 @@ import os
 import pytest
 from fastapi.testclient import TestClient
 
-from {{cookiecutter.project_slug}} import api
+from {{cookiecutter.project_slug}}.api import app
 
 
 @pytest.fixture
 def graphql_client() -> Generator[TestClient, None, None]:
-    app = api.app
     # app.config["TESTING"] = True
 
     # Get log level from environment variable
@@ -35,7 +33,7 @@ def graphql_client() -> Generator[TestClient, None, None]:
 
 @pytest.fixture
 async def async_client() -> AsyncGenerator[httpx.AsyncClient, None]:
-    async with LifespanManager(create_app()) as manager:
+    async with LifespanManager(app) as manager:
         async with httpx.AsyncClient(
             transport=httpx.ASGITransport(app=manager.app), base_url="http://test"
         ) as client:
@@ -50,5 +48,5 @@ async def async_client_unopened() -> AsyncGenerator[AsyncClient, Any]:
 
 @pytest.fixture
 def sync_client() -> Generator[TestClient, None, None]:
-    client = TestClient(create_app())
+    client = TestClient(app)
     yield client  # Use `yield` to ensure any teardown can happen after the test runs
