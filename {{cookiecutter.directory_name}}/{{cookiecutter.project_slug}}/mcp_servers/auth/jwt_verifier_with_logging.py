@@ -59,7 +59,11 @@ class JwtVerifierWithLogging(JWTVerifier):
             claims = self.jwt.decode(token, verification_key)
             logger.debug(f"Decoded claims: {claims}")
 
-            # check the client_id, sub and email claims to choose the one that looks like an email address
+            # Select the client identifier from JWT claims using the following precedence:
+            # 1. Prefer "client_id" if present, as this is the canonical identifier for OAuth2 clients.
+            # 2. If "client_id" is missing, use "email" if present, as it may identify the user in some systems.
+            # 3. If both are missing, use "sub" (subject), which is a standard JWT claim for the principal.
+            # 4. If none of these claims are present, default to "unknown".
             client_id = (
                 claims.get("client_id")
                 or claims.get("email")
