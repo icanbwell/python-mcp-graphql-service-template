@@ -1,5 +1,5 @@
-name: {{cookiecutter.docker_image_name}} - Deploy
-run-name: {{cookiecutter.docker_image_name}} to '${{ inputs.env }}' - '${{ inputs.tag }}'
+name: "{{cookiecutter.docker_image_name}} - Deploy"
+run-name: "{{cookiecutter.docker_image_name}} to '${{ inputs.env }}' - '${{ inputs.tag }}'"
 
 on:
   workflow_dispatch:
@@ -17,13 +17,14 @@ on:
           - staging-ue1
           - prod-ue1
           - client-sandbox-ue1
-    secrets:
-      BWELL_DEV_PAT:
-        required: true
+
+secrets:
+  BWELL_DEV_PAT:
+    required: true
 
 env:
-  SERVICE_NAME: {{cookiecutter.docker_image_name}}
-  SERVICE_NAMESPACE: {{cookiecutter.docker_image_name}}-'${{ inputs.env }}'
+  SERVICE_NAME: "{{cookiecutter.docker_image_name}}"
+  SERVICE_NAMESPACE: "{{cookiecutter.docker_image_name}}-${{ inputs.env }}"
 
 jobs:
   deploy:
@@ -47,10 +48,10 @@ jobs:
         uses: ./.github/actions/cie.gha-deploy
         with:
           token: ${{ secrets.BWELL_DEV_PAT }}
-          service-name: $SERVICE_NAME
-          service-namespace: $SERVICE_NAMESPACE
+          service-name: ${{ env.SERVICE_NAME }}
+          service-namespace: ${{ env.SERVICE_NAMESPACE }}
           env: '${{ inputs.env }}'
-          image-tag: '${{ github.event.inputs.tag }}'
+          image-tag: '${{ inputs.tag }}'
 
       - name: 'Cleanup build folder'
         if: always()
