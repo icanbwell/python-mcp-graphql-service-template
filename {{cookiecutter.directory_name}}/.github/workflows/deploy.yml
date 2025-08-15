@@ -1,5 +1,5 @@
 name: {{cookiecutter.docker_image_name}} - Deploy
-run-name: {{cookiecutter.docker_image_name}} to '${{ inputs.env }}'
+run-name: {{cookiecutter.docker_image_name}} to '${{ inputs.env }}' - '${{ inputs.tag }}'
 
 on:
   workflow_dispatch:
@@ -50,7 +50,7 @@ jobs:
           service-name: $SERVICE_NAME
           service-namespace: $SERVICE_NAMESPACE
           env: '${{ inputs.env }}'
-          image-tag: ${{ github.event.inputs.tag }}
+          image-tag: '${{ github.event.inputs.tag }}'
 
       - name: 'Cleanup build folder'
         if: always()
