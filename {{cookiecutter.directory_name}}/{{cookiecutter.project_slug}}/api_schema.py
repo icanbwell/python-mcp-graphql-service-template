@@ -21,7 +21,7 @@ datetime_scalar = ScalarType("DateTime")
 
 @datetime_scalar.serializer
 def serialize_datetime(value: Any) -> str:
-    return value.isoformat()  # type: ignore
+    return value.isoformat()
 
 
 class ApiSchema:
