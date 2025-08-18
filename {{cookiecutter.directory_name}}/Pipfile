@@ -4,8 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-# wheel is needed for building the package and installing wheels
-wheel = ">=0.43.0"
 # requests is needed for making HTTP requests
 requests = "*"
 # aridne is a Python library for building GraphQL APIs
@@ -34,6 +32,8 @@ authlib = ">=1.6.1"
 joserfc = ">=1.2.2"
 
 [dev-packages]
+# wheel is needed for building the package and installing wheels
+wheel = ">=0.43.0"
 # pre-commit is a Python library for running pre-commit checks
 pre-commit=">=3.8.0"
 # autoflake is a Python library for removing unused imports
