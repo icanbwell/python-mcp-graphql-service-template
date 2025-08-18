@@ -10,4 +10,4 @@ fi
 
 GIT_PROJECT_ROOT=$(git rev-parse --show-toplevel)
 cd "$($GIT_PROJECT_ROOT "$0")"
-docker build -f ./pre-commit.Dockerfile -t pre-commit-{{cookiecutter.project_slug}} . && docker run --rm --name pre-commit-run-{{cookiecutter.project_slug}} -e PRE_COMMIT_ALL_FILES=$PRE_COMMIT_ALL_FILES -v pre-commit:/.cache/pre-commit:delegated -v $(pwd)/:/sourcecode pre-commit-{{cookiecutter.project_slug}}
+docker build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} -f ./pre-commit.Dockerfile -t pre-commit-{{cookiecutter.project_slug}} . && docker run --rm --name pre-commit-run-{{cookiecutter.project_slug}} -e PRE_COMMIT_ALL_FILES=$PRE_COMMIT_ALL_FILES -v pre-commit:/.cache/pre-commit:delegated -v $(pwd)/:/sourcecode pre-commit-{{cookiecutter.project_slug}}
