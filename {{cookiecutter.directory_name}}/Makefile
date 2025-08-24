@@ -7,6 +7,7 @@ Pipfile.lock: # Locks Pipfile and updates the Pipfile.lock on the local file sys
 
 .PHONY:devsetup
 devsetup: ## one time setup for devs
+	touch docker.env && \
 	make update && \
 	make up && \
 	make setup-pre-commit && \

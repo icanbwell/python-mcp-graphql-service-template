@@ -15,6 +15,7 @@ from typing import (
     AsyncContextManager,
     Callable,
     Mapping,
+    Any
 )
 
 from {{cookiecutter.project_slug}}.api_schema import ApiSchema
