@@ -20,9 +20,9 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: create docker.env
+      - name: create .env
         run: |
-          touch ./docker.env
+          touch ./.env
 
       - name: pre-commit
         run: make run-pre-commit && make clean-pre-commit
