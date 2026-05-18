@@ -1,13 +1,15 @@
 export LANG
 
-.PHONY: Pipfile.lock
-Pipfile.lock: # Locks Pipfile and updates the Pipfile.lock on the local file system
-	docker compose --progress=plain build --no-cache --build-arg RUN_PIPENV_LOCK=true --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} dev && \
-	docker compose --progress=plain run dev sh -c "cp -f /tmp/Pipfile.lock /usr/src/{{cookiecutter.directory_name}}/Pipfile.lock"
+.PHONY: uv.lock
+uv.lock: ## Locks dependencies and updates uv.lock on the local file system
+	docker compose --progress=plain build --no-cache --build-arg RUN_UV_LOCK=true dev && \
+	CONTAINER_ID=$$(docker create {{cookiecutter.directory_name}}-dev) && \
+	docker cp $$CONTAINER_ID:/tmp/uv.lock uv.lock && \
+	docker rm $$CONTAINER_ID
 
 .PHONY:devsetup
 devsetup: ## one time setup for devs
-	touch docker.env && \
+	touch .env && \
 	make update && \
 	make up && \
 	make setup-pre-commit && \
@@ -24,14 +26,14 @@ up: ## starts docker containers
 	echo "waiting for {{cookiecutter.docker_image_name}} service to become healthy" && \
 	while [ "`docker inspect --format {% raw %}{{.State.Health.Status}}{% endraw %} {{cookiecutter.docker_image_name}}`" != "healthy" ]; do printf "." && sleep 2; done && \
 	echo ""
-	echo "{{cookiecutter.docker_image_name}} Service: http://localhost:5050/graphql"
+	echo "{{cookiecutter.docker_image_name}} Service: http://localhost:5050"
 
 .PHONY: down
 down: ## stops docker containers
 	docker compose down --remove-orphans
 
 .PHONY:update
-update: Pipfile.lock setup-pre-commit  ## Updates all the packages using Pipfile
+update: uv.lock setup-pre-commit  ## Updates all the packages using pyproject.toml
 	make build && \
 	make run-pre-commit && \
 	echo "In PyCharm, do File -> Invalidate Caches/Restart to refresh" && \

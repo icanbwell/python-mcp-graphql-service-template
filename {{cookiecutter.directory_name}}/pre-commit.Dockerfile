@@ -1,24 +1,22 @@
 FROM public.ecr.aws/docker/library/python:3.12-alpine3.20 AS python_packages
 
-# Set terminal width (COLUMNS) and height (LINES)
 ENV COLUMNS=300
 
-ARG GITHUB_TOKEN
+COPY --from=ghcr.io/astral-sh/uv:0.7.12 /uv /uvx /usr/local/bin/
+ENV UV_PROJECT_ENVIRONMENT=/opt/venv
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
-# Install git, build-essential, and pipenv
-RUN apk add --no-cache git build-base && \
-    pip install pipenv
+RUN apk add --no-cache git build-base
 
-# Copy Pipfile and Pipfile.lock
-COPY Pipfile* ./
+COPY pyproject.toml uv.lock* ./
 
-# Install dependencies using pipenv
-RUN pipenv sync --dev --system
+RUN uv sync --frozen --all-extras --group dev --no-install-project --verbose
 
-# Set the working directory
+ENV PATH="/opt/venv/bin:$PATH"
+
 WORKDIR /sourcecode
 
-# Clean up unnecessary files
 RUN git config --global --add safe.directory /sourcecode
 
 CMD ["pre-commit", "run", "--all-files"]

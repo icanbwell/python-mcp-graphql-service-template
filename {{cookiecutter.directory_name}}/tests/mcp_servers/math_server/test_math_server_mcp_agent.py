@@ -29,6 +29,7 @@ async def test_math_mcp_agent_via_fastmcp(
         headers: dict[str, str] | None = None,
         timeout: httpx.Timeout | None = None,
         auth: httpx.Auth | None = None,
+        follow_redirects: bool | None = None,
     ) -> httpx.AsyncClient:
         if headers:
             async_client_unopened.headers.update(headers)
@@ -36,6 +37,8 @@ async def test_math_mcp_agent_via_fastmcp(
             async_client_unopened.auth = auth
         if timeout:
             async_client_unopened.timeout = timeout
+        if follow_redirects is not None:
+            async_client_unopened.follow_redirects = follow_redirects
         return async_client_unopened
 
     transport: StreamableHttpTransport = StreamableHttpTransport(
