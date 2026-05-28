@@ -7,7 +7,7 @@ services:
     container_name: {{cookiecutter.docker_image_name}}
     environment:
       LOG_LEVEL: INFO
-      OTEL_SERVICE_NAME: {{cookiecutter.directory_name}}
+      OTEL_SERVICE_NAME: {{cookiecutter.docker_image_name}}
       OTEL_TRACES_EXPORTER: none
       OTEL_METRICS_EXPORTER: none
       OTEL_LOGS_EXPORTER: none
