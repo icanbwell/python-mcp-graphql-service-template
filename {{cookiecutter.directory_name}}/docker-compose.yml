@@ -6,9 +6,11 @@ services:
       target: development
     container_name: {{cookiecutter.docker_image_name}}
     environment:
-      DEBUG_METRICS: 0
-      DD_TRACE_ENABLED: "false"
       LOG_LEVEL: INFO
+      OTEL_SERVICE_NAME: {{cookiecutter.docker_image_name}}
+      OTEL_TRACES_EXPORTER: none
+      OTEL_METRICS_EXPORTER: none
+      OTEL_LOGS_EXPORTER: none
     env_file: .env
     ports:
       - '5050:5000'

@@ -73,7 +73,7 @@ RUN addgroup -S appgroup && adduser -S -h /etc/appuser appuser -G appgroup
 RUN chown -R appuser:appgroup ${PROJECT_DIR} /opt/venv ${PROMETHEUS_MULTIPROC_DIR}
 USER appuser
 
-CMD ["ddtrace-run", "uvicorn", "{{cookiecutter.project_slug}}.api:app", "--host", "0.0.0.0", "--port", "5000", "--workers", "4", "--log-level", "debug"]
+CMD ["opentelemetry-instrument", "uvicorn", "{{cookiecutter.project_slug}}.api:app", "--host", "0.0.0.0", "--port", "5000", "--workers", "4", "--log-level", "debug"]
 
 # Stage 3: Development runtime (extends production with dev deps and tests)
 FROM production AS development

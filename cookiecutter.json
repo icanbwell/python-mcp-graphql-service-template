@@ -2,7 +2,7 @@
   "directory_name": "your_repo_folder",
   "package_name": "{{ cookiecutter.directory_name|replace('-', '') }}",
   "project_slug": "{{ cookiecutter.package_name.lower().replace('helix.','').replace(' ', '_').replace('-', '_').replace('.', '_') }}",
-  "docker_image_name": "{{ cookiecutter.directory_name|replace('-', '') }}",
+  "docker_image_name": "{{ cookiecutter.directory_name|replace('_', '-') }}",
   "_copy_without_render": [
   ]
 }
